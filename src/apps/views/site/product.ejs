@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%- include("layout/head", { title: "Chi tiet san pham" }) %>
+<link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+<!--	Header	-->
+<%- include("layout/header") %>
+
+<!--	End Header	-->
+
+<!--	Body	-->
+<div id="body">
+	<div class="container">
+    	<%- include("layout/menu") %>
+        <div class="row">
+        	<div id="main" class="col-lg-8 col-md-12 col-sm-12">
+            	<!--	Slider	-->
+                <%- include("layout/slider") %>
+                <!--	End Slider	-->
+                <!-- Content -->
+
+                 <div id="product">
+                	<div id="product-head" class="row">
+                    	<div id="product-img" class="col-lg-6 col-md-6 col-sm-12">
+                        	<img src="/static/images/products/<%= product.prd_image %>">
+                        </div>
+                        <div id="product-details" class="col-lg-6 col-md-6 col-sm-12">
+                        	<h1><%= product.prd_name %></h1>
+                            <ul>
+                            	<li><span>Bảo hành:</span> <%= product.prd_warranty %></li>
+                                <li><span>Đi kèm:</span> <%= product.prd_accessories %></li>
+                                <li><span>Tình trạng:</span> <%= product.prd_new %></li>
+                                <li><span>Khuyến Mại:</span> <%= product.prd_promotion %></li>
+                                <li id="price">Giá Bán (chưa bao gồm VAT)</li>
+                                <li id="price-number"><%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.prd_price) %></li>
+                                <li>
+                                    <% if(product.prd_status){ %>
+                                        <span class="badge badge-success">Còn hàng</span>
+                                    <% } %>
+                                    <% if(!product.prd_status){ %>
+                                        <span class="badge badge-danger">Hết hàng</span>
+                                    <% } %>
+                                </li>
+                            </ul>
+
+                            <% if (product.prd_status){ %>
+                            <form method="post" action="/add-to-cart">
+                                <input type="hidden" value="<%= product.id %>" name="prd_id" />
+                                <div class="form-row align-items-center">
+                                <div class="col-sm-3 my-1">
+                                    <div class="input-group">
+                                    <input type="number" class="form-control" min="1" value="1" name="qty" id="quantity" placeholder="Số lượng">
+                                    </div>
+                                </div>
+                                <div class="col-auto my-1">
+                                    <button type="submit" class="btn btn-primary">
+                                    Add to cart
+                                    </button>
+                                </div>
+                                </div>
+                            </form>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div id="product-body" class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <h3>Đánh giá về <%= product.prd_name %></h3>
+                            <%= product.prd_details %>
+                        </div>
+                    </div>
+                    
+                    <!--	Comment	-->
+                    <div id="comment" class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <h3>Bình luận sản phẩm</h3>
+                            <form method="post" action="/comments">
+                                <input type="hidden" value="<%= product._id %>" name="prd_id" />
+                                <div class="form-group">
+                                    <label>Tên:</label>
+                                    <input name="comm_name" required type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email:</label>
+                                    <input name="comm_mail" required type="email" class="form-control" id="pwd">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nội dung:</label>
+                                    <textarea name="comm_details" required rows="8" class="form-control"></textarea>     
+                                </div>
+                                <button type="submit" name="sbm" class="btn btn-primary">Gửi</button>
+                            </form> 
+                        </div>
+                    </div>
+                    <!--	End Comment	-->  
+                    
+                    <!--	Comments List	-->
+                    <div id="comments-list" class="row">
+                    	<div class="col-lg-12 col-md-12 col-sm-12">
+                            <% if (!comments.length) { %>
+                                <p>Không có bình luận nao</p>
+                            <% } %>
+                            <% for (let comment of comments) { %>
+                            <div class="comment-item">
+                                <ul>
+                                    <li><b><%= comment.name %></b></li>
+                                    <li><%= comment.createdAt %></li>
+                                    <li>
+                                        <p><%= comment.content %></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <!--	End Comments List	-->
+                </div>
+
+                <!--	End Product	--> 
+                <div id="pagination">
+                    <ul class="pagination">
+                <% if (page > 1) { %>
+                  <li class="page-item"><a class="page-link" href="/product.<%= product.id %>?page=<%= page - 1 %>#comments-list">&laquo;</a></li>
+                  <% } %>
+                  
+                  <% pages.forEach((i) => { %>
+                      <% if (i === "...") { %>
+                          <li class="page-item"><span class="page-link"><%= i %></span></li>
+                      <% } else { %>
+                          <li class="page-item <%= page === i ? "active":"" %>"><a class="page-link" href="/product.<%= product.id %>?page=<%= i %>#comments-list"><%= i %></a></li>
+                      <%  } %>
+                  
+                  <% }) %>
+
+                  <% if (page < totalPage) { %>
+                  <li class="page-item"><a class="page-link" href="/product.<%= product.id %>?page=<%= page + 1 %>#comments-list">&raquo;</a></li>
+                    <% } %>
+              </ul>
+                </div>  
+
+                <!-- Content -->
+                
+            </div>
+            <%- include("layout/sidebar") %>
+            
+        </div>
+    </div>
+</div>
+<!--	End Body	-->
+
+
+<%- include("layout/footer") %>
+
+
+</body>
+</html>

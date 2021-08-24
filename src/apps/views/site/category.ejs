@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include("layout/head", { title: "Category" }) %>
+    <link rel="stylesheet" href="css/category.css" />
+  </head>
+  <body>
+    <!--	Header	-->
+    <%- include("layout/header") %>
+
+    <!--	End Header	-->
+
+    <!--	Body	-->
+    <div id="body">
+      <div class="container">
+        <%- include("layout/menu") %>
+        <div class="row">
+          <div id="main" class="col-lg-8 col-md-12 col-sm-12">
+            <!--	Slider	-->
+            <%- include("layout/slider") %>
+            <!--	End Slider	-->
+            <!-- Content -->
+              <!--	List Product	-->
+            <div class="products">
+              <h3><%= category.cat_name %> (hiện có <%=  total %> sản phẩm)</h3>
+              <%- include("components/product-list", { products }) %>
+            </div>
+            <!--	End List Product	-->
+
+            <div id="pagination">
+              <ul class="pagination">
+                <% if (page > 1) { %>
+                  <li class="page-item"><a class="page-link" href="/category.<%= category.id %>?page=<%= page - 1 %>">&laquo;</a></li>
+                  <% } %>
+                  
+                  <% pages.forEach((i) => { %>
+                      <% if (i === "...") { %>
+                          <li class="page-item"><span><%= i %></span></li>
+                      <% } else { %>
+                          <li class="page-item <%= page === i ? "active":"" %>"><a class="page-link" href="/category.<%= category.id %>?page=<%= i %>"><%= i %></a></li>
+                      <%  } %>
+                  
+                  <% }) %>
+
+                  <% if (page < totalPage) { %>
+                  <li class="page-item"><a class="page-link" href="/category.<%= category.id %>?page=<%= page + 1 %>">&raquo;</a></li>
+                    <% } %>
+              </ul>
+            </div>
+            <!-- Content -->
+          </div>
+          <%- include("layout/sidebar") %>
+        </div>
+      </div>
+    </div>
+    <!--	End Body	-->
+
+    <%- include("layout/footer") %>
+  </body>
+</html>

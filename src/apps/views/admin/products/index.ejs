@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vietpro Mobile Shop - Administrator</title>
+    <%- include("../layout/head") %>
+    <link href="css/datepicker3.css" rel="stylesheet" />
+    <link href="css/bootstrap-table.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <!--Icons-->
+    <script src="js/lumino.glyphs.js"></script>
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <%- include("../layout/header") %> 
+    <%- include("../layout/sidebar") %>
+    <!--/.sidebar-->
+
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Danh sách sản phẩm</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Danh sách sản phẩm</h1>
+			</div>
+		</div><!--/.row-->
+		<div id="toolbar" class="btn-group">
+            <a href="/admin/products/create" class="btn btn-success">
+                <i class="glyphicon glyphicon-plus"></i> Thêm sản phẩm
+            </a>
+        </div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+                        <table 
+                            data-toolbar="#toolbar"
+                            data-toggle="table">
+
+						    <thead>
+						    <tr>
+						        
+						        <th data-field="name"  data-sortable="true">Tên sản phẩm</th>
+                                <th data-field="price" data-sortable="true">Giá</th>
+                                <th>Ảnh sản phẩm</th>
+                                <th>Trạng thái</th>
+                                <th>Danh mục</th>
+                                <th>Hành động</th>
+						    </tr>
+                            </thead>
+                            <tbody>
+                                <% for (let product of products) { %>
+                
+                                    <tr>
+                                        
+                                        <td style=""><%= product.prd_name %></td>
+                                        <td style=""><%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.prd_price) %></td>
+                                        <td style="text-align: center"><img width="130" height="180" src="/static/images/products/<%= product.prd_image %>" /></td>
+                                        <td>
+                                        <% if (product.prd_status) { %>
+                                        <span class="label label-success">Còn hàng</span>
+                                        <% } %>
+                                        <% if (!product.prd_status) { %>
+                                        <span class="label label-danger">Hết hàng</span>
+                                        <% } %>
+                                        </td>
+                                        <td><%= product.cat_id.cat_name %></td>
+                                        <td class="form-group">
+                                            <a href="/admin/products/<%= product._id %>/edit" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a ref="remove_product" href="/admin/products/<%= product._id %>/delete" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                                 </tbody>
+						</table>
+                    </div>
+                    <div class="panel-footer">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <% if (page > 1) { %>
+                                <li class="page-item"><a class="page-link" href="/admin/products?page=<%= page - 1 %>">&laquo;</a></li>
+                                <% } %>
+                                
+                                <% pages.forEach((i) => { %>
+                                    <% if (i === "...") { %>
+                                        <li class="page-item"><span><%= i %></span></li>
+                                    <% } else { %>
+                                        <li class="page-item <%= page === i ? "active":"" %>"><a class="page-link" href="/admin/products?page=<%= i %>"><%= i %></a></li>
+                                    <%  } %>
+                                
+                                <% }) %>
+
+                                <% if (page < totalPage) { %>
+                                <li class="page-item"><a class="page-link" href="/admin/products?page=<%= page + 1 %>">&raquo;</a></li>
+                                 <% } %>
+                            </ul>
+                        </nav>
+                    </div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+	</div>
+
+    <!--/.main-->
+    <%- include("../layout/foot") %>
+    <script src="js/bootstrap-table.js"></script>	
+    <script>
+        $(document).ready(() => {
+                $("[ref=remove_product]").on("click", (e) => {
+
+                const check = confirm("Xac nhan xoa san pham")
+                
+                if (!check) {
+                    e.preventDefault()
+                }
+            })
+        })
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%- include("layout/head", { title: "Home" }) %>
+</head>
+<body>
+
+<!--	Header	-->
+<%- include("layout/header") %>
+
+<!--	End Header	-->
+
+<!--	Body	-->
+<div id="body">
+	<div class="container">
+    	<%- include("layout/menu") %>
+        <div class="row">
+        	<div id="main" class="col-lg-8 col-md-12 col-sm-12">
+            	<!--	Slider	-->
+                <%- include("layout/slider") %>
+                <!--	End Slider	-->
+                <!-- Content -->
+
+
+
+
+
+                <!-- Content -->
+                
+            </div>
+            <%- include("layout/sidebar") %>
+            
+        </div>
+    </div>
+</div>
+<!--	End Body	-->
+
+
+<%- include("layout/footer") %>
+
+
+</body>
+</html>

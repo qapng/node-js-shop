@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%- include("layout/head", { title: "Home" }) %>
+</head>
+<body>
+
+<!--	Header	-->
+<%- include("layout/header") %>
+
+<!--	End Header	-->
+
+<!--	Body	-->
+<div id="body">
+	<div class="container">
+    	<%- include("layout/menu") %>
+        <div class="row">
+        	<div id="main" class="col-lg-8 col-md-12 col-sm-12">
+            	<!--	Slider	-->
+                <%- include("layout/slider") %>
+                <!--	End Slider	-->
+                
+                <!--	Feature Product	-->
+                <div class="products">
+                    <h3>Sản phẩm nổi bật</h3>
+                   <%- include("components/product-list", { products: productFeatureds }) %>
+                    
+                </div>
+                <!--	End Feature Product	-->
+                
+                
+                <!--	Latest Product	-->
+                <div class="products">
+                    <h3>Sản phẩm mới</h3>
+                    <%- include("components/product-list", { products }) %>
+                   
+                </div>
+                <!--	End Latest Product	-->
+                
+            </div>
+            <%- include("layout/sidebar") %>
+            
+        </div>
+    </div>
+</div>
+<!--	End Body	-->
+
+
+<%- include("layout/footer") %>
+
+
+</body>
+</html>
